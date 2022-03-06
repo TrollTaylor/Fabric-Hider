@@ -4,10 +4,8 @@
   "package": "net.fabricmc.fabric_hider.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "TitleScreenMixin",
-    "MinecraftClientMixin",
-    "MinecraftClientMixinVoid",
     "ClientBrandMixin",
+    "MinecraftClientMixin",
     "MixinDebugHud"
   ],
   "client": [
