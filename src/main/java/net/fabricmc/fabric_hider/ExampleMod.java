@@ -18,10 +18,6 @@ public class ExampleMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-
-		((MinecraftClientMixin) MinecraftClient.getInstance()).setVersion("release");
-		((MinecraftClientMixin) MinecraftClient.getInstance()).setGameVersion(SharedConstants.getGameVersion().getName());
-
 		LOGGER.info("Hello Fabric world!");
 	}
 }

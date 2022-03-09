@@ -1,17 +1,26 @@
 package net.fabricmc.fabric_hider.mixin;
 
 import net.minecraft.client.MinecraftClient;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
+import net.minecraft.util.ModStatus;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin({MinecraftClient.class})
-public interface MinecraftClientMixin {
+public class MinecraftClientMixin {
 
-    @Accessor("versionType") @Mutable
-    public void setVersion(String version);
 
-    @Accessor("gameVersion") @Mutable
-    public void setGameVersion(String version);
+    @Shadow @Final
+    private String gameVersion = "1.18.1";
 
+    @Shadow @Final
+    private String versionType = "release";
+
+
+    @Overwrite
+    public static ModStatus getModStatus() {
+        return new ModStatus(net.minecraft.util.ModStatus.Confidence.PROBABLY_NOT, "Client" + " jar signature and brand is untouched");
+    }
 }
+
+
+
