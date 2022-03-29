@@ -10,7 +10,7 @@ public class MinecraftClientMixin {
 
 
     @Shadow @Final
-    private String gameVersion = "1.18.1";
+    private String gameVersion = "1.18.2";
 
     @Shadow @Final
     private String versionType = "release";
