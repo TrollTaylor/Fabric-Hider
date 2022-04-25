@@ -1,13 +1,12 @@
 package net.fabricmc.fabric_hider.mixin;
 
-import net.fabricmc.fabric_hider.ExampleMod;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.ModStatus;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin({MinecraftClient.class})
 public abstract class MinecraftClientMixin {
