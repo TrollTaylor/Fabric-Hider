@@ -7,8 +7,6 @@
     "ClientBrandMixin",
     "MinecraftClientMixin",
     "MixinDebugHud"
-  ],
-  "client": [
 
   ],
   "injectors": {
