@@ -6,11 +6,11 @@
   "name": "Fabric Hider",
   "description": "This mod hides fabric making it look like your playing vanilla! Why are you even looking at this???",
   "authors": [
-    "Taylor"
+    "Taylor",
+	"TheOneAndOnlyDanSan"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/TheOneAndOnlyDanSan/Fabric-Hider"
   },
 
   "license": "CC0-1.0",
@@ -18,9 +18,7 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.fabric_hider.ExampleMod"
-    ]
+    "main": []
   },
   "mixins": [
     "fabric_hider.mixins.json"
