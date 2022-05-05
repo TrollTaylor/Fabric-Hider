@@ -1,7 +1,0 @@
-v1	named	intermediary
-FIELD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	Ljava/lang/String;	gameVersion	field_1711
-FIELD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	Ljava/lang/String;	versionType	field_1720
-METHOD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	()Lnet/minecraft/client/util/Window;	getWindow	method_22683
-METHOD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	()Lnet/minecraft/util/ModStatus;	getModStatus	method_24289
-METHOD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	()V	updateWindowTitle	method_24288
-METHOD	net/fabricmc/fabric_hider/mixin/MinecraftClientMixin	()Ljava/lang/String;	getWindowTitle	method_24287
