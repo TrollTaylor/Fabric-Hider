@@ -13,14 +13,11 @@ import java.util.List;
 @Mixin(DebugHud.class)
 public class MixinDebugHud {
 
-    public int fart = 0;
-
     @Inject(at = @At("RETURN"), method = "getLeftText", cancellable =true)
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
 
         info.cancel();
 
-        fart++;
         if (RendererAccess.INSTANCE.hasRenderer()) {
             info.getReturnValue().remove("[Fabric] Active renderer: " + RendererAccess.INSTANCE.getRenderer().getClass().getSimpleName());
         } else {
