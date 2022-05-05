@@ -1,0 +1,24 @@
+{
+  "mappings": {
+    "net/fabricmc/fabric_hider/mixin/MixinDebugHud": {
+      "getRightText": "Lnet/minecraft/class_340;method_1839()Ljava/util/List;",
+      "getLeftText": "Lnet/minecraft/class_340;method_1835()Ljava/util/List;"
+    },
+    "net/fabricmc/fabric_hider/mixin/ResourcePackOrganizerMixin": {
+      "getEnabledProfiles": "Lnet/minecraft/class_3283;method_14444()Ljava/util/Collection;",
+      "getProfiles": "Lnet/minecraft/class_3283;method_14441()Ljava/util/Collection;"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "net/fabricmc/fabric_hider/mixin/MixinDebugHud": {
+        "getRightText": "Lnet/minecraft/class_340;method_1839()Ljava/util/List;",
+        "getLeftText": "Lnet/minecraft/class_340;method_1835()Ljava/util/List;"
+      },
+      "net/fabricmc/fabric_hider/mixin/ResourcePackOrganizerMixin": {
+        "getEnabledProfiles": "Lnet/minecraft/class_3283;method_14444()Ljava/util/Collection;",
+        "getProfiles": "Lnet/minecraft/class_3283;method_14441()Ljava/util/Collection;"
+      }
+    }
+  }
+}

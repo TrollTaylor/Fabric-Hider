@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.fabricmc.fabric_hider.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "ClientBrandRetrieverMixin",
+    "MinecraftClientMixin",
+    "MixinDebugHud",
+    "ResourcePackOrganizerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
