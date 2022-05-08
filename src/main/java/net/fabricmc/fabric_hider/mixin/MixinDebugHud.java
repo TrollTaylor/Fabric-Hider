@@ -1,6 +1,7 @@
 package net.fabricmc.fabric_hider.mixin;
 
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric_hider.util.Config;
 import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,7 @@ public class MixinDebugHud {
 		
         List renderList = new ArrayList<String>();
         for(int i = 0; i < info.getReturnValue().size(); i++){
-            if(!(info.getReturnValue().get(i).contains("[Iris]") || info.getReturnValue().get(i).contains("[Entity Batching]"))){
+            if(!(ContainsHiddenF3(info.getReturnValue().get(i)))){
                 renderList.add(info.getReturnValue().get(i));
             }
         }
@@ -36,8 +37,17 @@ public class MixinDebugHud {
         }
         info.setReturnValue(renderList);
     }
-	
-	
+
+
+    public boolean ContainsHiddenF3(String s){
+        for(int i = 0; i < Config.hiddenF3.length; i++){
+            if(s.contains(Config.hiddenF3[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Inject(at = @At("RETURN"), method = "getRightText", cancellable = true)
     protected void getRightText(CallbackInfoReturnable<List<String>> info) {
 		
