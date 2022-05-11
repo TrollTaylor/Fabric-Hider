@@ -1,5 +1,6 @@
 package net.fabricmc.fabric_hider.mixin;
 
+import net.fabricmc.fabric_hider.util.Config;
 import net.minecraft.client.ClientBrandRetriever;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +12,8 @@ public abstract class ClientBrandRetrieverMixin {
 
     @Inject(at = @At("HEAD"), method = "getClientModName", cancellable = true, remap = false)
     private static void getClientModName(CallbackInfoReturnable<String> callback) {
-        callback.setReturnValue("vanilla");
+        if(Config.hideServer) {
+            callback.setReturnValue("vanilla");
+        }
     }
 }

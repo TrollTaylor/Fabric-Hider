@@ -1,7 +1,6 @@
 package net.fabricmc.fabric_hider.mixin;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import net.fabricmc.fabric_hider.util.Config;
 import net.fabricmc.fabric_hider.util.ConfigIndex;
 import net.minecraft.SharedConstants;
@@ -28,18 +27,39 @@ import java.util.stream.Collectors;
 public abstract class MinecraftClientMixin {
 
 
-    @Shadow @Final
-    private String gameVersion = "1.18.2";
 
-    @Shadow @Final
-    private String versionType = "release";
+   // @Shadow @Final
+   // private String gameVersion = "1.18.1";
+
+    //@Shadow @Final
+   // private String versionType = "release";
 
 
     @Shadow public abstract Window getWindow();
 
+
+
+    @Inject(method="getGameVersion", at =@At("HEAD"), cancellable = true)
+    public void getGameVersion(CallbackInfoReturnable we){
+        if(Config.hideClient){
+            we.setReturnValue(MinecraftClient.getInstance().getGame().getVersion().getReleaseTarget());
+        }
+    }
+
+    @Inject(method="getVersionType", at =@At("HEAD"), cancellable = true)
+    public void getVersionType(CallbackInfoReturnable we){
+        if(Config.hideClient) {
+            we.setReturnValue("release");
+        }
+    }
+
     @Overwrite
     public static ModStatus getModStatus() {
-        return new ModStatus(net.minecraft.util.ModStatus.Confidence.PROBABLY_NOT, "Client" + " jar signature and brand is untouched");
+        if(Config.hideClient) {
+            return new ModStatus(net.minecraft.util.ModStatus.Confidence.PROBABLY_NOT, "Client" + " jar signature and brand is untouched");
+        }
+        return new ModStatus(ModStatus.Confidence.DEFINITELY, "Client" + " jar signature and brand is untouched");
+
     }
 
     @Overwrite
@@ -49,11 +69,13 @@ public abstract class MinecraftClientMixin {
 
     @Inject(at = @At("HEAD"), method = "run", cancellable =true)
     protected void run(CallbackInfo info) {
+
         File file = new File("config/fabric_hider/config.json");
         File dir = new File("config/fabric_hider");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         ConfigIndex w = new ConfigIndex();
+
 
         if(!file.exists())
         {
@@ -62,7 +84,11 @@ public abstract class MinecraftClientMixin {
                 file.createNewFile();
 
                 w.hiddenF3 = new String[]{"[Iris]","[Entity Batching]"};
-                w.hiddenLogs = new String[]{"Fabric","fabric","- java","- minecraft", "Indigo", "Compatibility", "mods"};
+                w.hiddenLogs = new String[]{"Fabric","fabric","- java","- minecraft", "Indigo", "Compatibility", "mods", "BiomeModificationImpl"};
+
+                w.hideServer = true;
+                w.hideClient = true;
+
 
                 try (Writer writer = new FileWriter(file)) {
                     gson.toJson(w, writer);
@@ -75,8 +101,26 @@ public abstract class MinecraftClientMixin {
             }
         }else{
             try (Reader reader = new FileReader(file)) {
+                JsonParser jp = new JsonParser();
+                JsonObject jo = jp.parse(reader).getAsJsonObject();
 
-                w = gson.fromJson(reader, ConfigIndex.class);
+                w = gson.fromJson(jo, ConfigIndex.class);
+
+
+
+                if(!jo.has("hideServer")){
+
+
+                    w.hideServer = true;
+                    w.hideClient = true;
+
+                    try (Writer writer = new FileWriter(file)) {
+                        gson.toJson(w, writer);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
 
             }catch (IOException e) {
                 e.printStackTrace();
@@ -87,7 +131,18 @@ public abstract class MinecraftClientMixin {
 
         Config.hiddenF3 = w.hiddenF3;
         Config.hiddenLogs = w.hiddenLogs;
+        Config.hideClient = w.hideClient;
+        Config.hideServer = w.hideServer;
 
+
+    }
+
+    public boolean jsoncontains(JsonArray ja, String s){
+        for(int i = 0; i < ja.size(); i++) {
+
+            if(ja.get(i).getAsJsonObject().get(s).getAsString() != null) return true;
+        }
+        return false;
     }
 
     public boolean ContainsHiddenLogs(String s){
@@ -102,53 +157,35 @@ public abstract class MinecraftClientMixin {
     @Inject(at = @At("HEAD"), method = "close", cancellable =true)
     protected void close(CallbackInfo info)  {
 
-        File file = new File("logs/latest.log");
-        List<String> out = null;
-        try {
+        if(Config.hideClient) {
+            File file = new File("logs/latest.log");
+            List<String> out = null;
+            try {
 
-            out = Files.lines(file.toPath())
-                    .filter(line -> !ContainsHiddenLogs(line))
+                out = Files.lines(file.toPath())
+                        .filter(line -> !ContainsHiddenLogs(line))
 //                    .filter(line -> !line.contains("Fabric") && !line.contains("fabric") && !line.contains("- java") && !line.contains("- minecraft") && !line.contains("Indigo"))
-                    .collect(Collectors.toList());
+                        .collect(Collectors.toList());
 
-            for(int i = 0; i < out.size(); i++){
-                if(out.get(i).toUpperCase().contains("MINECRAFT")){
-                    out.set(i, Pattern.compile(" (Minecraft)", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(out.get(i))
-                            .replaceAll(Matcher.quoteReplacement(":")));
+                for (int i = 0; i < out.size(); i++) {
+                    if (out.get(i).toUpperCase().contains("MINECRAFT")) {
+                        out.set(i, Pattern.compile(" (Minecraft)", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(out.get(i))
+                                .replaceAll(Matcher.quoteReplacement(":")));
+                    }
                 }
+
+                Files.write(file.toPath(), out, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
-            Files.write(file.toPath(), out, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
-//        try{
-//            FileInputStream fstream = new FileInputStream("logs/latest.log");
-//            File tempFile = new File("myTempFile.txt");
-//
-//
-//            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-//            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-//
-//            String strLine;
-//
-//            while ((strLine = br.readLine()) != null)   {
-//                if(strLine.contains("Fabric")){
-//                    String trimmedLine = strLine.trim();
-//                    if(trimmedLine.contains("Fabric")) continue;
-//                    writer.write(strLine + System.getProperty("line.separator"));
-//                }
-//            }
-//            fstream.close();
-//        } catch (Exception e) {
-//            System.err.println("Error: " + e.getMessage());
-//        }
     }
 
     @Overwrite
     private String getWindowTitle() {
+
         StringBuilder stringBuilder = new StringBuilder("Minecraft");
 
         stringBuilder.append(" ");
