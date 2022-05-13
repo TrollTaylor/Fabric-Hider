@@ -5,4 +5,7 @@ public class ConfigIndex {
     public String[] hiddenF3;
     public String[] hiddenLogs;
 
+    public boolean hideClient;
+
+    public boolean hideServer;
 }

@@ -16,26 +16,27 @@ public class MixinDebugHud {
 
     @Inject(at = @At("RETURN"), method = "getLeftText", cancellable =true)
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
+        if(Config.hideClient) {
+            info.cancel();
 
-        info.cancel();
-
-        if (RendererAccess.INSTANCE.hasRenderer()) {
-            info.getReturnValue().remove("[Fabric] Active renderer: " + RendererAccess.INSTANCE.getRenderer().getClass().getSimpleName());
-        } else {
-            info.getReturnValue().remove("[Fabric] Active renderer: none (vanilla)");
-        }
-		
-        List renderList = new ArrayList<String>();
-        for(int i = 0; i < info.getReturnValue().size(); i++){
-            if(!(ContainsHiddenF3(info.getReturnValue().get(i)))){
-                renderList.add(info.getReturnValue().get(i));
+            if (RendererAccess.INSTANCE.hasRenderer()) {
+                info.getReturnValue().remove("[Fabric] Active renderer: " + RendererAccess.INSTANCE.getRenderer().getClass().getSimpleName());
+            } else {
+                info.getReturnValue().remove("[Fabric] Active renderer: none (vanilla)");
             }
+
+            List renderList = new ArrayList<String>();
+            for (int i = 0; i < info.getReturnValue().size(); i++) {
+                if (!(ContainsHiddenF3(info.getReturnValue().get(i)))) {
+                    renderList.add(info.getReturnValue().get(i));
+                }
+            }
+            if (renderList.size() >= 22) {
+                renderList.remove(renderList.size() - 1);
+                renderList.remove(renderList.size() - 1);
+            }
+            info.setReturnValue(renderList);
         }
-        if(renderList.size() >= 22) {
-            renderList.remove(renderList.size() - 1);
-            renderList.remove(renderList.size() - 1);
-        }
-        info.setReturnValue(renderList);
     }
 
 
@@ -50,18 +51,18 @@ public class MixinDebugHud {
 
     @Inject(at = @At("RETURN"), method = "getRightText", cancellable = true)
     protected void getRightText(CallbackInfoReturnable<List<String>> info) {
-		
-        List renderList = new ArrayList<String>();
-        for(int i = 0; i < info.getReturnValue().size(); i++){
-            if(!(info.getReturnValue().get(i).contains("[Iris]") || info.getReturnValue().get(i).contains("[Entity Batching]") || info.getReturnValue().get(i).contains("Sodium") || info.getReturnValue().get(i).contains("IRIS") || info.getReturnValue().get(i).contains("Direct Buffers") || info.getReturnValue().get(i).contains("Off-Heap") || info.getReturnValue().get(i).contains("Device") || info.getReturnValue().get(i).contains("Chunk arena") || info.getReturnValue().get(i).contains("build") || info.getReturnValue().get(i).contains("buffer") || info.getReturnValue().get(i).contains("replaymod") || info.getReturnValue().get(i).contains("[Culling]") )){
-                renderList.add(info.getReturnValue().get(i));
+		if(Config.hideClient) {
+            List renderList = new ArrayList<String>();
+            for (int i = 0; i < info.getReturnValue().size(); i++) {
+                if (!(info.getReturnValue().get(i).contains("[Iris]") || info.getReturnValue().get(i).contains("[Entity Batching]") || info.getReturnValue().get(i).contains("Sodium") || info.getReturnValue().get(i).contains("IRIS") || info.getReturnValue().get(i).contains("Direct Buffers") || info.getReturnValue().get(i).contains("Off-Heap") || info.getReturnValue().get(i).contains("Device") || info.getReturnValue().get(i).contains("Chunk arena") || info.getReturnValue().get(i).contains("build") || info.getReturnValue().get(i).contains("buffer") || info.getReturnValue().get(i).contains("replaymod") || info.getReturnValue().get(i).contains("[Culling]"))) {
+                    renderList.add(info.getReturnValue().get(i));
+                }
             }
+            if (renderList.size() >= 22) {
+                renderList.remove(9);
+
+            }
+            info.setReturnValue(renderList);
         }
-        if(renderList.size() >= 22) {
-            renderList.remove(9);
-			
-        }
-        info.setReturnValue(renderList);
-		
     }
 }
