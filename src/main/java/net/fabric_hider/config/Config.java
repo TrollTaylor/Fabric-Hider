@@ -1,4 +1,4 @@
-package net.fabricmc.fabric_hider.util;
+package net.fabric_hider.config;
 
 public class Config {
     public static String[] hiddenLogs;
@@ -7,6 +7,8 @@ public class Config {
     public static boolean hideClient;
 
     public static boolean hideServer;
+
+    public static boolean showResourcePack;
 
 
 }
