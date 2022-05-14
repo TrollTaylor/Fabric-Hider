@@ -14,15 +14,12 @@ public class ConfigFile {
     static ConfigIndex w = new ConfigIndex();
 
     public static void configFile() {
-
-
-
         if (!file.exists()) {
             try {
                 dir.mkdir();
                 file.createNewFile();
 
-                w.hiddenF3 = new String[]{"[Iris]", "[Entity Batching]"};
+                w.hiddenF3 = new String[]{"[Iris]", "[Entity Batching]", "Sodium","[Culling]"};
                 w.hiddenLogs = new String[]{"Fabric", "fabric", "- java", "- minecraft", "Indigo", "Compatibility", "mods", "BiomeModificationImpl"};
 
                 w.hideServer = true;
@@ -51,11 +48,7 @@ public class ConfigFile {
 
             w = gson.fromJson(jo, ConfigIndex.class);
 
-
-
             if(!jo.has("hideServer")){
-
-
                 w.hideServer = true;
                 w.hideClient = true;
                 w.showResourcePack = true;
@@ -65,9 +58,7 @@ public class ConfigFile {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
         }catch (IOException e) {
             e.printStackTrace();
         }
