@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static net.fabric_hider.config.ConfigFile.configFile;
+import static net.fabric_hider.config.ConfigFile.updateConfigFile;
 
 @Mixin({MinecraftClient.class})
 public abstract class MinecraftClientMixin {
