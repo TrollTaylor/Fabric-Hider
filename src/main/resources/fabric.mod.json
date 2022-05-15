@@ -26,9 +26,7 @@
 
 
   "depends": {
-    "fabricloader": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "fabricloader": "*",
+    "fabric": "*"
   }
 }
