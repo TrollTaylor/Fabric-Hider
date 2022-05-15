@@ -50,22 +50,4 @@ public class DebugHudMixin {
         }
         return false;
     }
-
-    @Inject(at = @At("RETURN"), method = "getRightText", cancellable = true)
-    protected void getRightText(CallbackInfoReturnable<List<String>> info) {
-        updateConfigFile();
-        if(Config.hideClient) {
-            List renderList = new ArrayList<String>();
-            for (int i = 0; i < info.getReturnValue().size(); i++) {
-                if (!(info.getReturnValue().get(i).contains("[Iris]") || info.getReturnValue().get(i).contains("[Entity Batching]") || info.getReturnValue().get(i).contains("Sodium") || info.getReturnValue().get(i).contains("IRIS") || info.getReturnValue().get(i).contains("Direct Buffers") || info.getReturnValue().get(i).contains("Off-Heap") || info.getReturnValue().get(i).contains("Device") || info.getReturnValue().get(i).contains("Chunk arena") || info.getReturnValue().get(i).contains("build") || info.getReturnValue().get(i).contains("buffer") || info.getReturnValue().get(i).contains("replaymod") || info.getReturnValue().get(i).contains("[Culling]"))) {
-                    renderList.add(info.getReturnValue().get(i));
-                }
-            }
-            if (renderList.size() >= 22) {
-                renderList.remove(9);
-
-            }
-            info.setReturnValue(renderList);
-        }
-    }
 }

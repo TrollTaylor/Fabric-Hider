@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import static net.fabric_hider.config.ConfigFile.configFile;
 import static net.fabric_hider.config.ConfigFile.updateConfigFile;
 
 @Mixin({MinecraftClient.class})
@@ -62,7 +63,7 @@ public abstract class MinecraftClientMixin {
     @Inject(at = @At("HEAD"), method = "run", cancellable =true)
     protected void run(CallbackInfo info) {
 
-        updateConfigFile();
+        configFile();
     }
 
     public boolean jsoncontains(JsonArray ja, String s){
