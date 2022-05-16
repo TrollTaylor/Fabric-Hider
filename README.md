@@ -1,8 +1,12 @@
-# Fabric Example Mod
+# Fabric Hider
 
-## Setup
+Hides fabric from your client and also tells servers you are playing in vanilla!
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Feel free to copy or improve any code you would like.
+
+
+## Discord Server
+https://discord.gg/xWETXKrvv2
 
 ## License
 
