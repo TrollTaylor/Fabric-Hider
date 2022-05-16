@@ -1,11 +1,7 @@
 package net.fabric_hider.mixin;
 
-import com.google.gson.*;
 import net.fabric_hider.config.Config;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.ModStatus;
 import org.spongepowered.asm.mixin.*;
@@ -52,26 +48,11 @@ public abstract class MinecraftClientMixin {
             return new ModStatus(net.minecraft.util.ModStatus.Confidence.PROBABLY_NOT, "Client" + " jar signature and brand is untouched");
         }
         return new ModStatus(ModStatus.Confidence.DEFINITELY, "Client" + " jar signature and brand is untouched");
-
-    }
-
-    @Overwrite
-    public void updateWindowTitle() {
-        MinecraftClient.getInstance().getWindow().setTitle(getWindowTitle());
     }
 
     @Inject(at = @At("HEAD"), method = "run", cancellable =true)
     protected void run(CallbackInfo info) {
-
         configFile();
-    }
-
-    public boolean jsoncontains(JsonArray ja, String s){
-        for(int i = 0; i < ja.size(); i++) {
-
-            if(ja.get(i).getAsJsonObject().get(s).getAsString() != null) return true;
-        }
-        return false;
     }
 
     public boolean ContainsHiddenLogs(String s){
@@ -110,29 +91,6 @@ public abstract class MinecraftClientMixin {
             }
 
         }
-    }
-
-    @Overwrite
-    private String getWindowTitle() {
-
-        StringBuilder stringBuilder = new StringBuilder("Minecraft");
-
-        stringBuilder.append(" ");
-        stringBuilder.append(SharedConstants.getGameVersion().getName());
-        ClientPlayNetworkHandler clientPlayNetworkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (clientPlayNetworkHandler != null && clientPlayNetworkHandler.getConnection().isOpen()) {
-            stringBuilder.append(" - ");
-            if (MinecraftClient.getInstance().getServer() != null && !MinecraftClient.getInstance().getServer().isRemote()) {
-                stringBuilder.append(I18n.translate("title.singleplayer", new Object[0]));
-            } else if (MinecraftClient.getInstance().isConnectedToRealms()) {
-                stringBuilder.append(I18n.translate("title.multiplayer.realms", new Object[0]));
-            } else if (MinecraftClient.getInstance().getServer() == null && (MinecraftClient.getInstance().getCurrentServerEntry() == null || !MinecraftClient.getInstance().getCurrentServerEntry().isLocal())) {
-                stringBuilder.append(I18n.translate("title.multiplayer.other", new Object[0]));
-            } else {
-                stringBuilder.append(I18n.translate("title.multiplayer.lan", new Object[0]));
-            }
-        }
-        return stringBuilder.toString();
     }
 }
 
